@@ -1,0 +1,1 @@
+{"version":3,"sources":["components/icon/index.js"],"names":["Component","properties","type","String","value"],"mappings":";;AACAA,UAAU;AACRC,cAAY;AACVC,UAAM;AACJA,YAAMC,MADF;AAEJC,aAAO;AAFH;AADI;AADJ,CAAV","file":"index.js","sourcesContent":["\nComponent({\n  properties: {\n    type: {\n      type: String,\n      value: ''\n    }\n  }\n})"]}

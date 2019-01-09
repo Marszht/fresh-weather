@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.js"],"names":["App","globalData","nickname","avatarUrl"],"mappings":";;AAAAA,IAAI;AACFC,cAAY;AACVC,cAAU,IADA;AAEVC,eAAW;AAFD;AADV,CAAJ","file":"app.js","sourcesContent":["App({\n  globalData: {\n    nickname: null,\n    avatarUrl: null\n  }\n})"]}

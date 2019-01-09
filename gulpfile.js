@@ -47,7 +47,7 @@ const handleError = (err) => {
 
 gulp.task('wxml', () => {
   return gulp
-    .sec(`${src}/**/*.wxml`)
+    .src(`${src}/**/*.wxml`)
     .pipe(gulp.dest(dist))
 })
 

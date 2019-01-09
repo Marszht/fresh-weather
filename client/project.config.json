@@ -1,0 +1,14 @@
+{
+  "cloudfunctionRoot": "./cloud-functions/",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "autoAudits": false
+  },
+  "appid": "wxd54090c679055f42",
+  "priojectname": "fresh-weather",
+  "condition": {}
+}
