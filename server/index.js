@@ -3,6 +3,8 @@ const path = require('path')
 // 像这种常量一般都不写在本地
 const {PORT} = require('../config.server.json')
 
+const heWeather = require('./cloud-functions/he-weather').main
+
 const app = express()
 
 // 实现静态资源服务
@@ -15,6 +17,14 @@ app.use(
     maxAge: '30d'
   })
 )
+// 引入模块然后分配路由
+app.get('/api/he-weather', (req, res, next) => {
+  console.log('result')
+  heWeather(req.query).then(res.json.bind(res)).catch ((e) => {
+    console.error('why',e)
+    next(e)
+  })
+})
 // 开启端口为1314的本地服务
 app.listen(PORT, () => {
   console.log(`开发服务器启动成功: http://127.0.0.1:${PORT}`)

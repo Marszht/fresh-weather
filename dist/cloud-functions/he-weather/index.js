@@ -1,13 +1,12 @@
+const API_URL = 'https://free-api.heweather.com/s6/weather'
+const request = require('request')
 const path = require('path')
 const crypto = require('crypto')
-
 const KEY = 'ec499d965b6f4f268f8e3ec754cf75d9'    // 密钥
 const USER_ID = 'HE1809131857411294'             // 用户id
-
 // 小程序appid和密钥
 const WECHAT_APPID = 'wxd54090c679055f42'
 const WECHAT_APP_SECRET = 'f9047a4227dd04be07c81de3dc444425'
-
 // 接口的各种参数提供
 const $ = {
   getWechatAppConfig: () => {
@@ -31,7 +30,6 @@ const $ = {
         .join('&') + KEY
     return crypto.createHash('md5').update(data).digest('base64')
   },
-
   airBackgroundColor: (aqi) => {
     if (aqi < 50) {
       return '#00cf9a'
@@ -92,8 +90,34 @@ const $ = {
     }
   }
 }
-
-/*<remove>*/
-module.exports = $
-/*</remove>*/
-
+exports.main = async (event) => {
+  const {lat, lon} = event
+  let location = `${lat},${lon}`
+  let params = {
+    location,
+    t: Math.floor(Date.now() / 1e3),
+    unit: 'm'
+  }
+  // 生成签名 数字签名
+  params.sign = $.generateSignature(params)
+  let query = []
+  for (let i in params) {
+    query.push(`${i}=${encodeURIComponent(params[i])}`)
+  }
+  let url = API_URL + '?' + query.join('&')
+  console.log('url', url)
+  return new Promise((resolve, reject) => {
+    request.get(url, (error, responce, body) => {
+      if (error || responce.statusCode !== 200) {
+        reject(error)
+      } else {
+        try {
+          let rs = $.handlerData(JSON.parse(body))
+          console.log('rs', rs)
+        } catch (e) {
+          reject(e)
+        }
+      }
+    })
+  })
+}

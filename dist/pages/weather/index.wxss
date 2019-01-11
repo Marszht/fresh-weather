@@ -1,0 +1,106 @@
+.container {
+  margin-bottom: 20rpx;
+  max-width: 750rpx;
+  box-sizing: border-box;
+  color: #fff; }
+
+.wrapper .navigator {
+  color: white;
+  background: rgba(0, 0, 0, 0.1);
+  position: absolute;
+  right: 0;
+  top: 480rpx;
+  width: 40rpx;
+  border-radius: 20rpx 0 0 20rpx;
+  padding: 10rpx 20rpx;
+  z-index: 999; }
+  .wrapper .navigator icon {
+    font-size: 28rpx; }
+
+icon {
+  font-size: 32rpx; }
+
+.now {
+  height: 560rpx;
+  overflow: hidden;
+  position: relative;
+  color: #fff; }
+  .now .location {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 26rpx;
+    padding: 0 200rpx; }
+    .now .location icon {
+      font-size: 26rpx;
+      margin-right: 4rpx; }
+  .now .air-quality {
+    position: absolute;
+    top: auto;
+    left: 20rpx;
+    height: 28rpx;
+    line-height: 28rpx;
+    padding: 16rpx 20rpx;
+    border-radius: 8rpx;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.1);
+    font-size: 24rpx; }
+    .now .air-quality .circle {
+      content: '';
+      display: inline-block;
+      width: 8rpx;
+      height: 28rpx;
+      margin-right: 14rpx;
+      vertical-align: middle;
+      border-radius: 4rpx; }
+    .now .air-quality .value {
+      vertical-align: middle; }
+  .now .now-weather {
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    line-height: 1; }
+  .now .temp {
+    margin-bottom: 10rpx; }
+  .now .temp text {
+    color: #fff;
+    font-weight: lighter;
+    font-family: helvetica-ultra-light;
+    font-size: 240rpx;
+    display: inline-block;
+    vertical-align: top; }
+  .now .temp text.degree {
+    font-size: 80rpx; }
+  .now .cur-weather {
+    font-size: 32rpx;
+    margin-bottom: 40rpx;
+    line-height: 1;
+    position: relative; }
+    .now .cur-weather icon {
+      font-size: 32rpx;
+      margin-right: 10rpx; }
+    .now .cur-weather .inline {
+      margin-bottom: 30rpx;
+      font-size: 32rpx; }
+      .now .cur-weather .inline:last-child {
+        margin-bottom: 0; }
+    .now .cur-weather .today {
+      display: flex;
+      flex-direction: row; }
+      .now .cur-weather .today .item {
+        display: block;
+        padding-right: 16rpx;
+        margin: 0 16rpx 0 0;
+        border-right: 2rpx solid rgba(255, 255, 255, 0.4);
+        font-size: 28rpx;
+        flex: 1;
+        text-align: right; }
+        .now .cur-weather .today .item:last-child {
+          text-align: left;
+          border: none;
+          padding: 0;
+          margin: 0; }

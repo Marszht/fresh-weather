@@ -96,10 +96,7 @@ gulp.task('wxs', () => {
 })
 
 gulp.task('images', () => {
-  return 
-  gulp
-   .src(`${src}/images/**`)
-   .pipe(gulp.dest(`${dist}/images`))
+  return  gulp.src(`${src}/images/**`).pipe(gulp.dest(`${dist}/images`))
 })
 
 gulp.task('json', ()=> {
