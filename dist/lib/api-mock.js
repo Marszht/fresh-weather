@@ -3,15 +3,41 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getAir = exports.getWeather = undefined;
+
+var _bluebird = require('./bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // 获取天气接口及数据
 var getWeather = exports.getWeather = function getWeather(lat, lon) {
-  return new Promise(function (resolve, reject) {
+  return new _bluebird2.default(function (resolve, reject) {
     wx.request({
       url: 'http://127.0.0.1:1314/api/he-weather',
       data: {
         lat: lat,
         lon: lon
+      },
+      success: function success(res) {
+        console.log('success', res);
+        resolve({ result: res.data });
+      },
+      fail: function fail(e) {
+        console.log('sad');
+        reject(e);
+      }
+    });
+  });
+};
+// 获得空气质量
+var getAir = exports.getAir = function getAir(city) {
+  return new _bluebird2.default(function (resolve, reject) {
+    wx.request({
+      url: 'http://127.0.0.1:3000/api/he-air',
+      data: {
+        city: city
       },
       success: function success(res) {
         resolve({ result: res.data });

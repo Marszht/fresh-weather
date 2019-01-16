@@ -64,15 +64,15 @@ const $ = {
     }
     let isNight = $._isNight(hours, sr, ss)
     // 暂时不用
-    let name = $.getWeatherName(cond_code)
+    // let name = $.getWeatherName(cond_code)
     return {
       // backgroundImage: $.getBackgroundImage(name, isNight),
-      temp: f1,
+      temp: fl,
       wind: wind_dir,
       windLevel: wind_sc,
       weather: cond_txt,
       humidity: hum,
-      ts: _data.updata.loc             // 时间
+      ts: _data.update.loc             // 时间
     }
   },
   // 处理接口数据

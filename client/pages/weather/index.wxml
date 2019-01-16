@@ -1,31 +1,31 @@
 <view class="wrapper" style="background: url({{backgroundImage}}) center -178rpx / 100% no-repeat {{backgroundColor}}">
   <!-- 心情按钮 -->
   <view class="navigator" bindtap="goDiary">
-   <icon type="edit"/>
+    <icon type="edit" />
   </view>
-    <!-- 顶部栏 包括今天实时天气空气质量， 以及今明两天天气 -->
+  <!-- 顶部栏 包括今天实时天气空气质量， 以及今明两天天气 -->
   <!-- padding-top 根据手机系统来， 因为不同手机的顶部的navBar不同 -->
   <view class="container" id="canvas-wrapper" style="padding-top: {{paddingTop}}px">
     <view class="now">
       <view class="location" bindtab="">
         <icon type="dingwei" />
-        <text >{{adress}}</text>
+        <text>{{adress}}</text>
       </view>
       <!-- 空气质量 -->
       <view class="air-quality" wx:if="true">
         <text class="circle" style="background: red"></text>
         <text class="value">{{}}良 45</text>
       </view>
-      <!-- 当前实况天气  -->
+      <!-- 当前实况天气 -->
       <view class="now-weather">
         <view class="temp">
-         <text >{{current.temp}}</text>
-         <text class="degree">°</text>
+          <text>{{current.temp}}</text>
+          <text class="degree">°</text>
         </view>
         <view class="cur-weather">
           <view class="inline">
-            <icon type="{{ current.icon }}"/>
-            <text >{{current.weather}}</text>
+            <icon type="{{ current.icon }}" />
+            <text>{{current.weather}}</text>
           </view>
           <view class="inline today">
             <text class="item">{{}}潮湿</text>
@@ -33,11 +33,32 @@
           </view>
         </view>
         <view class="tips" wx:if="{{}}true">
-          <text >{{tips}}最美不过夕阳红</text>
+          <text>{{tips}}最美不过夕阳红</text>
         </view>
       </view>
     </view>
-
     <!-- 今明两天天气 -->
+    <view class="two-days">
+      <view class="item">
+        <view class="top">
+          <text class="date">今天</text>
+          <text class="temp">{{}}3</text>
+        </view>
+        <view class="bottom">
+          <text>{{}}微风习习</text>
+          <icon type="{{}}" class="logo" />
+        </view>
+      </view>
+      <view class="item">
+        <view class="top">
+          <text class="date">明天</text>
+          <text class="temp">{{}}3</text>
+        </view>
+        <view class="bottom">
+          <text>{{}}酷暑难耐</text>
+          <icon type="{{}}" class="logo"/>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

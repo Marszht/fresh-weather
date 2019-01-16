@@ -31,6 +31,7 @@ exports.main = async (event) => {
       } else {
         try {
           let rs = $.handlerData(JSON.parse(body))
+          // 执行了
           console.log('rs', rs)
         } catch (e) {
           reject(e)

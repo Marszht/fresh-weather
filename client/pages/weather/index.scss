@@ -9,6 +9,17 @@
   white-space: nowrap;
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  @include flex-row;
+}
+.flex-column {
+  @include flex-column;
+}
+
 $grid-margin: 20rpx;
 .container {
   margin-bottom: $grid-margin;
@@ -140,3 +151,46 @@ icon {
 }
 
 // 今明两天天气 
+.two-days {
+  @include flex-row;
+  $gap: 24rpx;
+  padding: $gap 0;
+  overflow: hidden;
+  width: 100%;
+  
+  .item {
+    font-size: 28rpx;
+    line-height: 28rpx;
+    padding: 0 40rpx;
+    width: 50%;
+    border-right: 2rpx solid rgba(255, 255, 255, .4);
+    &:last-child {
+      border-right: none;
+    }
+    .top {
+      height: 24rpx;
+      margin-bottom: 26rpx;
+      margin-right: -20rpx;
+    }
+    .date {
+      float: left;
+    }
+    .temp {
+      float: right;
+    }
+    .bottom {
+      height: 44rpx;
+      text {
+        float: left;
+        height: 44rpx;
+        line-height: 44rpx;
+      }
+    }
+    .icon {
+      float: right;
+      font-size: 44rpx;
+      height: 44rpx;
+      width: 44rpx;
+    }
+  }
+}

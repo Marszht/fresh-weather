@@ -1,3 +1,11 @@
+.flex-row {
+  display: flex;
+  flex-direction: row; }
+
+.flex-column {
+  display: flex;
+  flex-direction: column; }
+
 .container {
   margin-bottom: 20rpx;
   max-width: 750rpx;
@@ -104,3 +112,37 @@ icon {
           border: none;
           padding: 0;
           margin: 0; }
+
+.two-days {
+  display: flex;
+  flex-direction: row;
+  padding: 24rpx 0;
+  overflow: hidden;
+  width: 100%; }
+  .two-days .item {
+    font-size: 28rpx;
+    line-height: 28rpx;
+    padding: 0 40rpx;
+    width: 50%;
+    border-right: 2rpx solid rgba(255, 255, 255, 0.4); }
+    .two-days .item:last-child {
+      border-right: none; }
+    .two-days .item .top {
+      height: 24rpx;
+      margin-bottom: 26rpx;
+      margin-right: -20rpx; }
+    .two-days .item .date {
+      float: left; }
+    .two-days .item .temp {
+      float: right; }
+    .two-days .item .bottom {
+      height: 44rpx; }
+      .two-days .item .bottom text {
+        float: left;
+        height: 44rpx;
+        line-height: 44rpx; }
+    .two-days .item .icon {
+      float: right;
+      font-size: 44rpx;
+      height: 44rpx;
+      width: 44rpx; }

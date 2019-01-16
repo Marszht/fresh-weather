@@ -1,0 +1,23 @@
+<view class="navigator">
+  <icon type="back" bindtap="goBack" />
+</view>
+<view class="calendar">
+<!-- 第三方插件里面的一些参数属性 -->
+  <calendar weeks-type="full-en" cell-size="30" next="{{false}}" prev="{{false}}"
+  show-more-days="{{true}}" calendar-style="demo6-calendar" header-style="calendar-header" board-style="calendar-board" day-color="{{dayStyle}}"></calendar>
+</view>
+<view class="auth-button">
+  <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">使用改功能需要授权登录</button>
+</view>
+
+<view>
+  <!-- 提交后 的样式 -->
+  <view class="publish">
+    <view class="title">
+      <text >{{nickname}}, 你今天的心情是</text>
+    </view>
+    <view class="colors">
+      <view class="todayMood mood"></view>
+    </view>
+  </view>
+</view>

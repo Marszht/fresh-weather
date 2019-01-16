@@ -1,5 +1,5 @@
 /*<remove trigger="prod">*/
-import {getWeather} from '../../lib/api-mock'
+import {getWeather, getAir} from '../../lib/api-mock'
 /*</remove>*/
 
 /*<jdists trigger="prod">
@@ -85,10 +85,10 @@ Page({
   },
   // 获取页面数据 天气数据
   getWeatherData(cb) {
-    wx.showLoading({
-      title: '获取数据中',
-      mask: true
-    })
+    // wx.showLoading({
+    //   title: '获取数据中',
+    //   mask: true
+    // })
     // 失败的回调
     const fail = (e) => {
       wx.hideLoading()
@@ -113,7 +113,20 @@ Page({
         if (res.result) {
           console.log('res.result:', res.result)
         }
-      })
+      }) .catch(fail)
+
+      // 获取空气质量
+      getAir(city)
+        .then((res) => {
+          // 严谨一点
+          if (res && res.result) {
+            console.log('air', res.result)
+            this.setData({
+              air: res.result
+            })
+          }
+        }) 
+        .catch((e) => {})
   },
   // 一个分享, 分享你当前地址的天气状况
   onshareAppMessage() {

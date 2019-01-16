@@ -1,1 +1,1 @@
-{"version":3,"sources":["pages/diary/index.js"],"names":["app","getApp","Page","data"],"mappings":";;AAAA,IAAMA,MAAMC,QAAZ;AACAC,KAAK;AACHC,QAAM;AADH,CAAL","file":"index.js","sourcesContent":["const app = getApp()\nPage({\n  data: {\n  }\n})"]}
+{"version":3,"sources":["pages/diary/index.js"],"names":["app","getApp","globalData","Page","data"],"mappings":";;AAAA,IAAMA,MAAMC,QAAZ;AACA,IAAMC,aAAaF,IAAIE,UAAvB;AACAC,KAAK;AACHC,QAAM;AADH,CAAL","file":"index.js","sourcesContent":["const app = getApp()\nconst globalData = app.globalData;\nPage({\n  data: {\n  }\n})"]}

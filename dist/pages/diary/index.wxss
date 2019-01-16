@@ -1,0 +1,11 @@
+.calendar {
+  padding: 30rpx; }
+
+.container {
+  padding: 0 20rpx; }
+
+.navigator {
+  padding: 64rpx 20rpx 20rpx; }
+  .navigator icon {
+    font-size: 32rpx;
+    color: #333; }

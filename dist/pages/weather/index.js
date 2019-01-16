@@ -88,10 +88,12 @@ Page({
 
   // 获取页面数据 天气数据
   getWeatherData: function getWeatherData(cb) {
-    wx.showLoading({
-      title: '获取数据中',
-      mask: true
-    });
+    var _this2 = this;
+
+    // wx.showLoading({
+    //   title: '获取数据中',
+    //   mask: true
+    // })
     // 失败的回调
     var fail = function fail(e) {
       wx.hideLoading();
@@ -121,7 +123,17 @@ Page({
       if (res.result) {
         console.log('res.result:', res.result);
       }
-    });
+    }).catch(fail);
+    // 获取空气质量
+    (0, _apiMock.getAir)(city).then(function (res) {
+      // 严谨一点
+      if (res && res.result) {
+        console.log('air', res.result);
+        _this2.setData({
+          air: res.result
+        });
+      }
+    }).catch(function (e) {});
   },
 
   // 一个分享, 分享你当前地址的天气状况

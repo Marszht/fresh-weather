@@ -4,6 +4,7 @@ const path = require('path')
 const {PORT} = require('../config.server.json')
 
 const heWeather = require('./cloud-functions/he-weather').main
+const heAir = require('./cloud-functions/he-air/').main
 
 const app = express()
 
@@ -19,9 +20,16 @@ app.use(
 )
 // 引入模块然后分配路由
 app.get('/api/he-weather', (req, res, next) => {
-  console.log('result')
+  // console.log('result', re)
   heWeather(req.query).then(res.json.bind(res)).catch ((e) => {
     console.error('why',e)
+    next(e)
+  })
+})
+
+app.get('/api/he-air', (req, res, next) => {
+  heAir(req.query).then(res.json.bind(res)).catch((e) => {
+    console.error(e);
     next(e)
   })
 })
