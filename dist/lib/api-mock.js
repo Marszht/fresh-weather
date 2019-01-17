@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAir = exports.getWeather = undefined;
+exports.jscode2session = exports.getAir = exports.getWeather = undefined;
 
 var _bluebird = require('./bluebird');
 
@@ -45,6 +45,21 @@ var getAir = exports.getAir = function getAir(city) {
       fail: function fail(e) {
         reject(e);
       }
+    });
+  });
+};
+// 获取临时登陆凭证
+var jscode2session = exports.jscode2session = function jscode2session(code) {
+  return new _bluebird2.default(function (resolve, reject) {
+    wx.request({
+      url: 'http://127.0.0.1:3000/api/jscode2session',
+      data: {
+        code: code
+      },
+      success: function success(res) {
+        resolve({ result: res.data });
+      },
+      fail: reject
     });
   });
 };

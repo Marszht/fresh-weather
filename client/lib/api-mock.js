@@ -38,3 +38,19 @@ export const getAir = (city) => {
     })
   })
 }
+
+// 获取临时登陆凭证
+export const jscode2session = (code) => {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: 'http://127.0.0.1:3000/api/jscode2session',
+      data: {
+        code
+      },
+      success: (res) => {
+        resolve({result: res.data});
+      }, 
+      fail: reject
+    })
+  })
+}

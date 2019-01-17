@@ -11,13 +11,18 @@
 </view>
 
 <view>
-  <!-- 提交后 的样式 -->
+  <!-- 提交后的样式 -->
   <view class="publish">
     <view class="title">
       <text >{{nickname}}, 你今天的心情是</text>
     </view>
     <view class="colors">
-      <view class="todayMood mood"></view>
+      <view class="todayMood mood">
+      <view ><icon class="emoji" type="{{}}" /></view>
+      </view>
     </view>
   </view>
+  <!-- 未提交之前 -->
+  <!-- 需要两个判断 -->
+  <!-- <view class="publish" wx:if="{{}}"></view> -->
 </view>
