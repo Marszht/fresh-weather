@@ -101,7 +101,7 @@ exports.main = async (event) => {
     grant_type: 'authorization_code'
   };
   let url = API_URL + '?' + querystring.stringify(data)
-  console.log('jscodeurl', url)
+  // console.log('jscodeurl', url)
   return new Promise((resolve, reject) => {
     request.get(url, (error, response, body) => {
       if (error || response.statusCode !== 200) {
@@ -109,7 +109,7 @@ exports.main = async (event) => {
       } else {
         try{
           const r = JSON.parse(body)
-          console.log(r)
+          // console.log(r)
           resolve(r)
         } catch (e) {
           reject(e)

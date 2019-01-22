@@ -2,27 +2,43 @@
   <icon type="back" bindtap="goBack" />
 </view>
 <view class="calendar">
-<!-- 第三方插件里面的一些参数属性 -->
-  <calendar weeks-type="full-en" cell-size="30" next="{{false}}" prev="{{false}}"
-  show-more-days="{{true}}" calendar-style="demo6-calendar" header-style="calendar-header" board-style="calendar-board" day-color="{{dayStyle}}"></calendar>
+  <!-- 第三方插件里面的一些参数属性 -->
+  <calendar binddateChange="dateChange" weeks-type="full-en" cell-size="30" next="{{false}}" prev="{{false}}" show-more-days="{{true}}" calendar-style="demo6-calendar" header-style="calendar-header" board-style="calendar-board" days-color="{{daysStyle}}"></calendar>
 </view>
-<view class="auth-button">
+<view class="auth-button" wx:if="{{auth===0}}">
   <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">使用改功能需要授权登录</button>
 </view>
-
-<view>
+<view wx:if="{{showPublish}}">
   <!-- 提交后的样式 -->
-  <view class="publish">
+  <view class="publish" wx:if="{{todayEmotion}}">
     <view class="title">
-      <text >{{nickname}}, 你今天的心情是</text>
+      <text>{{nickname}}, 你今天的心情是</text>
     </view>
     <view class="colors">
       <view class="todayMood mood">
-      <view ><icon class="emoji" type="{{}}" /></view>
+        <view style="background-color:{{colors[todayEmotion]}}">
+          <icon class="emoji" type="{{todayEmotion}}" />
+        </view>
       </view>
     </view>
   </view>
   <!-- 未提交之前 -->
   <!-- 需要两个判断 -->
-  <!-- <view class="publish" wx:if="{{}}"></view> -->
+  <view class="publish" wx:if="{{ !todayEmotaion && lastMonth===curMonth}}">
+    <view class="title">
+      <text>{{nickname}}, 你今天是什么心情？</text>
+    </view>
+    <view class="colors">
+      <view class="mood" wx:for="{{emotion}}" wx:key="index">
+        <view bindtap="checkedColor" data-emotion="{{item}}" style="background-color:{{colors[item]}}" wx:if="{{item === activeEmotion }}">
+          <icon type="{{item}}" class="emoji" />
+          <icon type="checked2" class="checked" />
+        </view>
+        <view bindtap="checkedColor" data-emotion="{{item}}" style="background-color:{{colors[item]}}" wx:else>
+          <icon type="{{item}}" class="emoji" />
+        </view>
+      </view>
+    </view>
+    <button bindtap="submmitEmotion">提交心情</button>
+  </view>
 </view>

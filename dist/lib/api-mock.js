@@ -13,7 +13,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // 获取天气接口及数据
 var getWeather = exports.getWeather = function getWeather(lat, lon) {
+  // console.log('get')
   return new _bluebird2.default(function (resolve, reject) {
+    // console.log('get2')
     wx.request({
       url: 'http://127.0.0.1:1314/api/he-weather',
       data: {
@@ -35,11 +37,12 @@ var getWeather = exports.getWeather = function getWeather(lat, lon) {
 var getAir = exports.getAir = function getAir(city) {
   return new _bluebird2.default(function (resolve, reject) {
     wx.request({
-      url: 'http://127.0.0.1:3000/api/he-air',
+      url: 'http://127.0.0.1:1314/api/he-air',
       data: {
         city: city
       },
       success: function success(res) {
+        console.log('air', res);
         resolve({ result: res.data });
       },
       fail: function fail(e) {
@@ -52,7 +55,7 @@ var getAir = exports.getAir = function getAir(city) {
 var jscode2session = exports.jscode2session = function jscode2session(code) {
   return new _bluebird2.default(function (resolve, reject) {
     wx.request({
-      url: 'http://127.0.0.1:3000/api/jscode2session',
+      url: 'http://127.0.0.1:1314/api/jscode2session',
       data: {
         code: code
       },
