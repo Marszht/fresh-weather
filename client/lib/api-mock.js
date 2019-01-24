@@ -2,24 +2,21 @@ import Promise from './bluebird'
 
 // 获取天气接口及数据
 export const getWeather = (lat, lon) => {
-  // console.log('get')
   return new Promise((resolve, reject) => {
-    // console.log('get2')
     wx.request({
-      url: 'http://127.0.0.1:1314/api/he-weather',
+      url: 'http://127.0.0.1:3000/api/he-weather',
       data: {
         lat,
         lon
       },
       success: (res) => {
-        console.log('success', res)
+        console.log('getWeatherData', res.data)
         resolve({result: res.data})
       },
       fail: (e) => {
-        console.log('sad')
         reject(e)
       }
-    }) 
+    })
   })
 }
 

@@ -146,3 +146,33 @@ icon {
       font-size: 44rpx;
       height: 44rpx;
       width: 44rpx; }
+
+.weather {
+  background-color: #62aadc; }
+  .weather .container {
+    background: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%; }
+
+.hourly .scrollX {
+  position: relative;
+  width: 928rpx;
+  padding: 40rpx 0;
+  height: 150rpx; }
+
+.hourly .item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 116rpx;
+  float: left; }
+
+.hourly .time,
+.hourly .temp {
+  line-height: 24rpx;
+  height: 28rpx;
+  position: relative; }
+
+.hourly icon {
+  font-size: 48rpx;
+  margin: 20rpx auto 30rpx; }

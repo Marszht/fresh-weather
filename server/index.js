@@ -28,7 +28,7 @@ app.get('/api/he-air', (req, res, next) => {
 // 引入模块然后分配路由
 app.get('/api/he-weather', (req, res, next) => {
   // console.log('api/he-weather', res.json)
-  heWeather(req.query).then( res.json.bind(res)).catch ((e) => {
+  heWeather(req.query).then(res.json.bind(res)).catch ((e) => {
     console.error('why',e)
     next(e)
   })

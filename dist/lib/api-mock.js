@@ -13,21 +13,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // 获取天气接口及数据
 var getWeather = exports.getWeather = function getWeather(lat, lon) {
-  // console.log('get')
   return new _bluebird2.default(function (resolve, reject) {
-    // console.log('get2')
     wx.request({
-      url: 'http://127.0.0.1:1314/api/he-weather',
+      url: 'http://127.0.0.1:3000/api/he-weather',
       data: {
         lat: lat,
         lon: lon
       },
       success: function success(res) {
-        console.log('success', res);
+        console.log('getWeatherData', res.data);
         resolve({ result: res.data });
       },
       fail: function fail(e) {
-        console.log('sad');
         reject(e);
       }
     });

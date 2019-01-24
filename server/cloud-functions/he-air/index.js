@@ -34,7 +34,7 @@ exports.main = async (event) => {
             resolve({
               status: 0,
               aqi,
-              // color:
+              color: $.airBackgroundColor(aqi),
               name: qlty
             })
           } else {

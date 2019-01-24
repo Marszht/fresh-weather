@@ -1,5 +1,7 @@
 // 真正api 文件
-import Promise from './bluebird'
+import Promise from './bluebird';
+
+const QQ_MAP_KEY = 'O76BZ-MD3LP-42IDV-V4R37-74P22-GYFUS'
 
 // 初始化云函数环境
 wx.cloud.init({
@@ -109,4 +111,35 @@ export const getAir = (city) => {
     }
   })
 }
+
+/**
+ * 调用微信接口获取openid
+ * @param {*} code
+ */
+export const jscode2session = (code) => {
+  return wx.cloud.callFunction({
+    name: 'jscode2session',
+    data: {
+      code
+    }
+  })
+}
+
+/**
+ * 逆经纬度查询
+ * @param {*} lat
+ * @param {*} lon
+ */
+ export const geocoder =(lat, lon, success = () => {}, fail = () => {}) => {
+   return wx.request({
+     url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+     data: {
+       location: `${lat},${lon}`,
+       key: QQ_MAP_KEY,
+       get_poi: 0
+     },
+     success,
+     fail
+   })
+ }
 

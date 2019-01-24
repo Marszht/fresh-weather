@@ -194,3 +194,38 @@ icon {
     }
   }
 }
+
+// 24小时详细天气
+.weather {
+  background-color: #62aadc;
+  .container {
+    background: rgba(0,  0,  0, .1);
+    overflow: hidden;
+    width: 100%;
+  }
+}
+.hourly {
+  .scrollX {
+    position: relative;
+    width: 928rpx;
+    padding: 40rpx 0;
+    height: 150rpx;
+  }
+  .item {
+    @include flex-column;
+    text-align: center;
+    width: 116rpx;
+    float: left;
+  }
+  .time,
+  .temp {
+    line-height: 24rpx;
+    height: 28rpx;
+    position: relative;
+  }
+  icon {
+    font-size: 48rpx;
+    margin: 20rpx auto 30rpx;
+  }
+}
+

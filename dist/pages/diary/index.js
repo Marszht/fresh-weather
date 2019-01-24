@@ -226,7 +226,7 @@ Page({
   onLoad: function onLoad() {
     var _this3 = this;
 
-    console.log('todayEmotion', this.data.todayEmotion);
+    // console.log('todayEmotion', this.data.todayEmotion)
     this.setData({
       curMonth: (0, _utils.dateFormat)(new Date(), 'yyyy-MM')
     });
@@ -254,7 +254,7 @@ Page({
         colors = _data.colors;
 
     (0, _api.addEmotion)(openid, activeEmotion).then(function (r) {
-      if (r.id) {
+      if (r._id) {
         var styles = _this4.data.daysStyle || [];
         var day = new Date().getDate();
         styles.push({

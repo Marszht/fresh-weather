@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAir = exports.getWeather = exports.addEmotion = exports.getEmotionByOpenidAndDate = undefined;
+exports.geocoder = exports.jscode2session = exports.getAir = exports.getWeather = exports.addEmotion = exports.getEmotionByOpenidAndDate = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); // 真正api 文件
 
@@ -14,6 +14,7 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var QQ_MAP_KEY = 'O76BZ-MD3LP-42IDV-V4R37-74P22-GYFUS';
 // 初始化云函数环境
 wx.cloud.init({
   env: 'fresh-weather-34df96'
@@ -103,6 +104,38 @@ var getAir = exports.getAir = function getAir(city) {
     data: {
       city: city
     }
+  });
+};
+/**
+ * 调用微信接口获取openid
+ * @param {*} code
+ */
+var jscode2session = exports.jscode2session = function jscode2session(code) {
+  return wx.cloud.callFunction({
+    name: 'jscode2session',
+    data: {
+      code: code
+    }
+  });
+};
+/**
+ * 逆经纬度查询
+ * @param {*} lat
+ * @param {*} lon
+ */
+var geocoder = exports.geocoder = function geocoder(lat, lon) {
+  var success = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {};
+  var fail = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
+
+  return wx.request({
+    url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+    data: {
+      location: lat + ',' + lon,
+      key: QQ_MAP_KEY,
+      get_poi: 0
+    },
+    success: success,
+    fail: fail
   });
 };
 //# sourceMappingURL=api.js.map

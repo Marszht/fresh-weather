@@ -199,7 +199,7 @@ Page({
     })
   },
   onLoad() {
-    console.log('todayEmotion', this.data.todayEmotion)
+    // console.log('todayEmotion', this.data.todayEmotion)
     this.setData({
       curMonth: dateFormat(new Date(), 'yyyy-MM')
     })
@@ -220,7 +220,7 @@ Page({
     let { openid, activeEmotion, colors } = this.data
     addEmotion(openid, activeEmotion)
       .then((r) => {
-        if (r.id) {
+        if (r._id) {
           let styles = this.data.daysStyle || []
           let day = new Date().getDate();
           styles.push({

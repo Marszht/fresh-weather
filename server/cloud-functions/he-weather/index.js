@@ -30,9 +30,10 @@ exports.main = async (event) => {
         reject(error)
       } else {
         try {
+          // console.log('JSON.parse(body)', JSON.parse(body))
           let rs = $.handlerData(JSON.parse(body))
-          // 执行了
-          console.log('rs', rs)
+          // 执行了 ?
+          // console.log('rs', rs)
         } catch (e) {
           reject(e)
         }

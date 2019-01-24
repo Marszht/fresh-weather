@@ -7,14 +7,14 @@
   <!-- padding-top 根据手机系统来， 因为不同手机的顶部的navBar不同 -->
   <view class="container" id="canvas-wrapper" style="padding-top: {{paddingTop}}px">
     <view class="now">
-      <view class="location" bindtab="">
+      <view class="location" bindtab="chooseLocation">
         <icon type="dingwei" />
-        <text>{{adress}}</text>
+        <text>{{address}}</text>
       </view>
       <!-- 空气质量 -->
-      <view class="air-quality" wx:if="true">
-        <text class="circle" style="background: red"></text>
-        <text class="value">{{}}良 45</text>
+      <view class="air-quality" wx:if="{{air.aqi}}">
+        <text class="circle" style="background:{{air.color}}"></text>
+        <text class="value">{{ air.name }} {{ air.aqi }}</text>
       </view>
       <!-- 当前实况天气 -->
       <view class="now-weather">
@@ -56,8 +56,39 @@
         </view>
         <view class="bottom">
           <text>{{}}酷暑难耐</text>
-          <icon type="{{}}" class="logo"/>
+          <icon type="{{}}" class="logo" />
         </view>
+      </view>
+    </view>
+  </view>
+  <!-- 24小时天气 -->
+  <view class="weather" style="background-color:{{backgroundColor}}">
+    <view class="container">
+      <scroll-view scroll-x class="hourly">
+        <view class="scrollX">
+          <view class="item" wx:for="{{hourlyData}}">
+            <text class="time">{{ item.time }}</text>
+            <icon class="icon" type="{{ item.icon }}"></icon>
+            <text class="temp">{{ item.temp }}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 七天天气 -->
+    <view class="container">
+      <view class="week">
+        <view class="week-weather">
+          <view class="item" wx:for="{{weeklyData}}">
+
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 生活指数 -->
+    <view class="container">
+      <view class="life-style">
+        <view class="item" wx:for="{{lifeStyle}}"></view>
       </view>
     </view>
   </view>
