@@ -10,19 +10,23 @@ wx.cloud.init({
 const db = wx.cloud.database();
 
 // 根据openid 和 日期获取月份相应签到日期的颜色
+// 从数据库中查 找数据
+// 数据渲染在界面上
 export const getEmotionByOpenidAndDate = (openid, year, month) => {
   const _ = db.command  // 取指令
+  // 判断的原因， 防止喜传过来的参数不对
   year = parseInt(year)
   month = parseInt(month)
   const now = new Date();
   const curMonth = now.getMonth();
   const curYear = now.getFullYear();
   const curDay = now.getDate();
+  // getTime()获取时间戳
   let start = new Date(year, month - 1, 1).getTime();
   let end = new Date(year, month, 1).getTime();
   // console.log(curYear, curDay, curMonth)
   if (month - 1 === curMonth && curDay <= 20 && year === curYear) {
-    // 如果是当前月份并且天数少于20，那么就一次取出
+    // 如果是当前月份并且日期数少于20，那么就一次取出
     return db
       .collection('diary')
       .where({
@@ -140,6 +144,23 @@ export const jscode2session = (code) => {
      },
      success,
      fail
+   })
+ }
+
+ /**
+  * 获取心情
+  */
+ export const getMood = (province, city, county, success = () => {}) => {
+   return wx.request({
+     url: 'https://wis.qq.com/weather/common',
+     data: {
+       source: 'wxa',
+       weather_type: 'tips',
+       province,
+       city,
+       county
+     },
+     success
    })
  }
 

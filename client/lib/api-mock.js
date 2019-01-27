@@ -29,7 +29,7 @@ export const getAir = (city) => {
         city
       },
       success: (res) => {
-        console.log('air', res)
+        // console.log('air', res)
         resolve({result: res.data})
       },
       fail: (e) => {

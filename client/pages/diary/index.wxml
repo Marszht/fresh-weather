@@ -24,7 +24,7 @@
   </view>
   <!-- 未提交之前 -->
   <!-- 需要两个判断 -->
-  <view class="publish" wx:if="{{ !todayEmotaion && lastMonth===curMonth}}">
+  <view class="publish" wx:if="{{ !todayEmotion && lastMonth===curMonth }}">
     <view class="title">
       <text>{{nickname}}, 你今天是什么心情？</text>
     </view>

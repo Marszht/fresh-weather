@@ -39,7 +39,7 @@ var getAir = exports.getAir = function getAir(city) {
         city: city
       },
       success: function success(res) {
-        console.log('air', res);
+        // console.log('air', res)
         resolve({ result: res.data });
       },
       fail: function fail(e) {

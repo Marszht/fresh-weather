@@ -1,7 +1,9 @@
+
+<wxs src="./index.wxs" module="utils"></wxs>
 <view class="wrapper" style="background: url({{backgroundImage}}) center -178rpx / 100% no-repeat {{backgroundColor}}">
   <!-- 心情按钮 -->
   <view class="navigator" bindtap="goDiary">
-    <icon type="edit" />
+    <icon type="edit"/>
   </view>
   <!-- 顶部栏 包括今天实时天气空气质量， 以及今明两天天气 -->
   <!-- padding-top 根据手机系统来， 因为不同手机的顶部的navBar不同 -->
@@ -28,12 +30,12 @@
             <text>{{current.weather}}</text>
           </view>
           <view class="inline today">
-            <text class="item">{{}}潮湿</text>
-            <text class="item">{{}}无风</text>
+            <text class="item">{{ utils.humidity(current.humidity) }}</text>
+            <text class="item">{{ utils.wind(current.wind, current.windLevel) }}无风</text>
           </view>
         </view>
-        <view class="tips" wx:if="{{}}true">
-          <text>{{tips}}最美不过夕阳红</text>
+        <view class="tips" wx:if="{{tips}}">
+          <text>{{tips}}</text>
         </view>
       </view>
     </view>
@@ -42,54 +44,81 @@
       <view class="item">
         <view class="top">
           <text class="date">今天</text>
-          <text class="temp">{{}}3</text>
+          <text class="temp">{{ today.temp }}</text>
         </view>
         <view class="bottom">
-          <text>{{}}微风习习</text>
-          <icon type="{{}}" class="logo" />
+          <text>{{ today.weather }}</text>
+          <icon type="{{ today.icon }}" class="logo" />
         </view>
       </view>
       <view class="item">
         <view class="top">
           <text class="date">明天</text>
-          <text class="temp">{{}}3</text>
+          <text class="temp">{{ tomorrow.temp }}</text>
         </view>
         <view class="bottom">
-          <text>{{}}酷暑难耐</text>
-          <icon type="{{}}" class="logo" />
+          <text>{{ tomorrow.weather }}</text>
+          <icon type="{{ tomorrow.icon }}" class="logo" />
         </view>
       </view>
     </view>
   </view>
-  <!-- 24小时天气 -->
+
   <view class="weather" style="background-color:{{backgroundColor}}">
+      <!-- 24小时天气 -->
     <view class="container">
       <scroll-view scroll-x class="hourly">
         <view class="scrollX">
-          <view class="item" wx:for="{{hourlyData}}">
+          <view class="item" wx:for="{{hourlyData}}" wx:key="index">
             <text class="time">{{ item.time }}</text>
             <icon class="icon" type="{{ item.icon }}"></icon>
-            <text class="temp">{{ item.temp }}</text>
+            <text class="temp">{{ item.temp }}°</text>
           </view>
         </view>
       </scroll-view>
     </view>
-
     <!-- 七天天气 -->
     <view class="container">
       <view class="week">
         <view class="week-weather">
-          <view class="item" wx:for="{{weeklyData}}">
-
+          <view class="item" wx:for="{{weeklyData}}" wx:key="index">
+            <view class="day">{{ utils.formatWeeklyDate(index) }}</view>
+            <view class="date">{{ utils.formatDate(item.time) }}</view>
+            <view class="daytime">
+              <view class="wt">{{ item.day }}</view>
+              <icon class="img" type="{{ item.dayIcon }}"></icon>
+            </view>
+            <view class="night">
+              <icon class="img" type="{{ item.nightIcon }}"></icon>
+              <view class="wt">{{ item.night }}</view>
+            </view>
+            <view class="wind">{{ utils.wind(item.nightWind) }}</view>
+            <view class="wind" wx:if="{{ item.nightWind }}">
+              {{ utils.windLevel(item.nightWindLevel) }}
+            </view>
+            <view class="wind" wx:else></view>
           </view>
+        </view>
+        <view class="week-chart">
+          <canvas canvas-id="chart" id="chart"></canvas>
         </view>
       </view>
     </view>
     <!-- 生活指数 -->
     <view class="container">
       <view class="life-style">
-        <view class="item" wx:for="{{lifeStyle}}"></view>
+        <view class="item" wx:for="{{lifeStyle}}" wx:key="index">
+          <view class="title">
+            <icon type="{{ item.icon }}" />
+            {{ item.name }}
+          </view>
+          <view class="content">{{ item.info }}</view>
+        </view>
       </view>
     </view>
+  </view>
+  <view class="source">
+    <text wx:if="{{oneWord === ''}}">· 我喜欢美珠 ·</text>
+    <text wx:else>{{ oneWord }}</text>
   </view>
 </view>

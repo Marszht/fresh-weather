@@ -12,6 +12,11 @@
    "uploadFile": 10000,
    "downloadFile": 10000
  },
+ "permission": {
+   "scope.userLocation": {
+     "desc": "我想获取你的地理位置,主人！！"
+   }
+ },
  "plugins": {
    "calendar": {
      "version" : "1.1.3",

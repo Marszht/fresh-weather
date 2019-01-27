@@ -141,7 +141,7 @@ icon {
         float: left;
         height: 44rpx;
         line-height: 44rpx; }
-    .two-days .item .icon {
+    .two-days .item icon {
       float: right;
       font-size: 44rpx;
       height: 44rpx;
@@ -176,3 +176,82 @@ icon {
 .hourly icon {
   font-size: 48rpx;
   margin: 20rpx auto 30rpx; }
+
+.week {
+  position: relative;
+  padding: 40rpx 0;
+  min-height: 200rpx; }
+  .week .week-weather {
+    display: flex;
+    flex-direction: row;
+    text-align: center; }
+    .week .week-weather .item:first-child {
+      color: #e0e0e0; }
+    .week .week-weather .item {
+      flex: 1; }
+      .week .week-weather .item .day, .week .week-weather .item .date, .week .week-weather .item .wind {
+        color: #efefef; }
+      .week .week-weather .item .wind {
+        font-size: 24rpx;
+        line-height: 24rpx;
+        height: 24rpx;
+        width: 80rpx;
+        margin: 0 auto 12rpx;
+        overflow: hidden; }
+      .week .week-weather .item .date {
+        margin: 10rpx 0 30rpx;
+        font-size: 24rpx; }
+      .week .week-weather .item .wt {
+        margin-bottom: 30rpx; }
+      .week .week-weather .item .night {
+        margin-top: 272rpx; }
+      .week .week-weather .item .night .wt {
+        margin: 32rpx 0 30rpx; }
+      .week .week-weather .item icon.img {
+        font-size: 38rpx;
+        display: block;
+        margin: 0 aotu; }
+  .week .week-chart {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 272rpx;
+    top: 262rpx; }
+  .week .week-chart canvas {
+    width: 750rpx;
+    height: 272rpx; }
+
+.life-style {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+  .life-style .item {
+    float: left;
+    text-align: center;
+    width: 25%;
+    height: 188rpx;
+    border-right: 2rpx solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2rpx solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+    padding: 50rpx 0 0; }
+  .life-style .content {
+    font-size: 36rpx;
+    margin-top: 20rpx; }
+  .life-style .title {
+    color: #fff;
+    opacity: 0.7;
+    font-size: 24rpx;
+    height: 24rpx;
+    line-height: 24rpx; }
+    .life-style .title icon {
+      font-size: 24rpx;
+      margin-right: 10rpx;
+      margin-top: -2rpx; }
+
+.source {
+  opacity: .6;
+  color: #fff;
+  padding: 24rpx 0 40rpx;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap; }

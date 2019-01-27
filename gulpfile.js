@@ -58,6 +58,12 @@ gulp.task('wxss', () => {
     gulp.src(`${src}/**/*.{wxss,scss}`),
     sass().on('error', sass.logError),
     postcss([pxtorpx(), base64()]),
+    isProd
+      ? cssnano({
+          autoprefixer: false,
+          discardComments: {removeAll: true}
+        })
+      : through.obj(),
     rename((path) => (path.extname = '.wxss')),
     gulp.dest(dist)
   ])
@@ -66,27 +72,32 @@ gulp.task('wxss', () => {
 })
 
 gulp.task('js', () => {
+  const f = filter((file) => !/(mock)/.test(file.path))
   gulp
     .src(`${src}/**/*.js`)
-    // 如果是 prod，则触发 jdists 的 prod trigger
-    // 否则则为 dev trigger
+    .pipe(isProd ? f : through.obj())
     .pipe(
-      isProd ? jdists({trigger: 'prod'}) 
-      : jdists({trigger: 'dev'})
+      isProd
+        ? jdists({
+            trigger: 'prod'
+          })
+        : jdists({
+            trigger: 'dev'
+          })
     )
-    // 如果是 prod，则传入空的流处理方法，不生成 sourcemap
     .pipe(isProd ? through.obj() : sourcemaps.init())
-    // 使用babel处理js文件
     .pipe(
       babel({
         presets: ['env']
       })
     )
-    // 如果是prod 则使用uglify 压缩js
     .pipe(
-      isProd ? uglify({compress: true}) : through.obj()
+      isProd
+        ? uglify({
+            compress: true
+          })
+        : through.obj()
     )
-    // 如果prod ,则传入空的流的处理方法， 不生成sourcemaps
     .pipe(isProd ? through.obj() : sourcemaps.write('./'))
     .pipe(gulp.dest(dist))
 })
@@ -96,13 +107,11 @@ gulp.task('wxs', () => {
 })
 
 gulp.task('images', () => {
-  return  gulp.src(`${src}/images/**`).pipe(gulp.dest(`${dist}/images`))
+  return gulp.src(`${src}/images/**`).pipe(gulp.dest(`${dist}/images`))
 })
 
-gulp.task('json', ()=> {
-  return gulp 
-          .src(`${src}/**/*.json`)
-          .pipe(gulp.dest(dist))
+gulp.task('json', () => {
+  return gulp.src(`${src}/**/*.json`).pipe(isProd ? jsonminify() : through.obj()).pipe(gulp.dest(dist))
 })
 
 // 聚合类

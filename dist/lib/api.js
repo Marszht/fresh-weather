@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.geocoder = exports.jscode2session = exports.getAir = exports.getWeather = exports.addEmotion = exports.getEmotionByOpenidAndDate = undefined;
+exports.getMood = exports.geocoder = exports.jscode2session = exports.getAir = exports.getWeather = exports.addEmotion = exports.getEmotionByOpenidAndDate = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); // 真正api 文件
 
@@ -21,19 +21,23 @@ wx.cloud.init({
 });
 var db = wx.cloud.database();
 // 根据openid 和 日期获取月份相应签到日期的颜色
+// 从数据库中查 找数据
+// 数据渲染在界面上
 var getEmotionByOpenidAndDate = exports.getEmotionByOpenidAndDate = function getEmotionByOpenidAndDate(openid, year, month) {
   var _ = db.command; // 取指令
+  // 判断的原因， 防止喜传过来的参数不对
   year = parseInt(year);
   month = parseInt(month);
   var now = new Date();
   var curMonth = now.getMonth();
   var curYear = now.getFullYear();
   var curDay = now.getDate();
+  // getTime()获取时间戳
   var start = new Date(year, month - 1, 1).getTime();
   var end = new Date(year, month, 1).getTime();
   // console.log(curYear, curDay, curMonth)
   if (month - 1 === curMonth && curDay <= 20 && year === curYear) {
-    // 如果是当前月份并且天数少于20，那么就一次取出
+    // 如果是当前月份并且日期数少于20，那么就一次取出
     return db.collection('diary').where({
       openid: openid,
       tsModified: _.gte(start).and(_.lt(end))
@@ -136,6 +140,24 @@ var geocoder = exports.geocoder = function geocoder(lat, lon) {
     },
     success: success,
     fail: fail
+  });
+};
+/**
+ * 获取心情
+ */
+var getMood = exports.getMood = function getMood(province, city, county) {
+  var success = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
+
+  return wx.request({
+    url: 'https://wis.qq.com/weather/common',
+    data: {
+      source: 'wxa',
+      weather_type: 'tips',
+      province: province,
+      city: city,
+      county: county
+    },
+    success: success
   });
 };
 //# sourceMappingURL=api.js.map

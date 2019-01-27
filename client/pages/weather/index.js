@@ -1,5 +1,7 @@
+import { fixChart, getChartConfig, drawEffect } from '../../lib/utils';
+import Chart from '../../lib/chartjs/chart'
 /*<remove trigger="prod">*/
-import { getMood, geocoder } from '../../lib/api'
+import { getMood, geocoder, getEmotionByOpenidAndDate } from '../../lib/api'
 import { getWeather, getAir } from '../../lib/api-mock'
 /*</remove>*/
 
@@ -7,7 +9,9 @@ import { getWeather, getAir } from '../../lib/api-mock'
 import {getEmotionByOpenidAndDate, getMood, geocoder, getWeather, getAir} from '../../lib/api'
 </jdists>*/
 const app = getApp()
-
+let can = false;
+const CHART_CANVAS_HEIGHT = 272 / 2;
+let isUpdata = false;
 Page({
   data: {
     statusBarHeight: 32,
@@ -110,7 +114,7 @@ Page({
   //  地址授权
   // 应该没有执行？ 
   onLocation() {
-    success: ({authSetting}) => {
+    success: ({ authSetting }) => {
       console.log('onlocation')
       can = authSetting['scope.userLocation'];
       if (can) {
@@ -123,8 +127,8 @@ Page({
   chooseLocation() {
     wx.chooseLocation({
       success: (res) => {
-        let {latitude, longitude} = res
-        let {lat, lon} = this.data;
+        let { latitude, longitude } = res
+        let { lat, lon } = this.data;
         if (latitude == lat && lon == longitude) {
           this.getWeatherData()
         } else {
@@ -133,45 +137,7 @@ Page({
       }
     })
   },
-  onLoad() {
-    // 获取系统信息
-    // 用于系统适配
-    wx.getSystemInfo({
-      success: (res) => {
-        let width = res.windowWidth
-        // 适配
-        let scale = width / 375
-        this.setData({
-          width,
-          scale,
-          paddingTop: res.statusBarHeight + 12
-        })
-      }
-    })
-    const pages = getCurrentPages()  // 获取当前加载页面
-    const currentPage = pages[pages.length - 1] // 获取当前页面对象
-    //  获取分享过来的地址
-    const query = currentPage.options
-    if (query && query.address && query.lat && query.lon) {
-      // setData 是异步的所以需要先获取数据在获取天气数据
-      this.setData({
-        city,
-        province,
-        county,
-        address,
-        lat,
-        lon
-      },
-        () => {
-          this.getWeatherData()
-        })
-    } else {
-      // this.setDataFormCash()
-      this.getLocation()
-    }
-    this.getWeatherData()
 
-  },
   // 跳转到签到页面
   goDiary() {
     try {
@@ -213,7 +179,7 @@ Page({
         }
         if (res.result) {
           this.render(res.result);
-          console.log('res.result:', res.result)
+          // console.log('res.result:', res.result)
         } else {
           fail();
         }
@@ -231,12 +197,24 @@ Page({
         }
       })
       .catch((e) => { })
+    //  或群签到的心情
+    getMood(province, city, county, (res) => {
+      let result = (res.data || {}).data;
+      if (result && result.tips) {
+        let tips = result.tips.observe;
+        let index = Math.floor(Math.random() * Object.keys(tips).length);
+        tips = tips[index];
+        this.setData({ tips })
+      }
+    })
   },
+  // 数据处理
   render(data) {
-    // isUpdata = true;
-    const {width, scale} = this.data;
-    const {hourly, daily, current, lifeStyle, oneWord = ''} = data;
-    const {backgroundColor, backgroundImage} = current;
+    // 全局定义了upData 
+    isUpdata = true;
+    const { width, scale } = this.data;
+    const { hourly, daily, current, lifeStyle, oneWord = '' } = data;
+    const { backgroundColor, backgroundImage } = current;
     const _today = daily[0],
       _tomorrow = daily[1];
     const today = {
@@ -260,6 +238,155 @@ Page({
       oneWord,
       lifeStyle
     })
+    //  延时画图
+    this.drawChart()
+    // 缓存数据
+    this.dataCache();
+    // 启动预取定时器
+    this._setPrefetchTimer(10e3);
+  },
+  // 当第二天的数据不存在时
+  dataCache() {
+    const { current, backgroundImage, backgroundColor, today, tomorrow, address, tips, hourlyData } = this.data;
+    wx.setStorage({
+      key: 'defaultData',
+      data: {
+        current,
+        backgroundColor,
+        backgroundImage,
+        today,
+        tomorrow,
+        address,
+        tips,
+        hourlyData
+      }
+    })
+  },
+  setDataFormCache() {
+    wx.getStorage({
+      key: 'defaultData',
+      success: ({ data }) => {
+        // 判断是否更新了
+        if (data || !isUpdata) {
+          // 存在并且没有获取数据成功，那么可以给首屏赋值上次数据
+          const { current, backgroundImage, backgroundColor, today, tomorrow, address, tips, hourlyData } = data;
+          this.setData({
+            current,
+            backgroundColor,
+            backgroundImage,
+            today,
+            tomorrow,
+            address,
+            tips,
+            hourlyData
+          })
+        }
+      }
+    })
+  },
+  //  赋值，， 默认值
+  _setPrefetchTimer(delay = 10e3) {
+    // 10s 预取
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const data = app.globalData[`diary-${year}-${month}`] || [];
+    if (!data.length && isUpdata) {
+      prefetchTimer = setTimeout(() => {
+        this.prefetch()
+      }, delay)
+    }
+  },
+  prefetch() {
+    let openid = wx.getStorageSync('openid');
+    if (openid) {
+      // 存在则预取当前时间的心情
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      getEmotionByOpenidAndDate(openid, year, month)
+        .then((r) => {
+          const data = r.data || [];
+          app.globalData[`diary-${year}-${month}`] = data;
+          console.log('globalData', app.globalData)
+        })
+        .catch((e) => {})
+    }
+  },
+  // chart 画图
+  // 直接用不用看， 以后有涉及就临时看
+  drawChart() {
+    console.log('cahrt')
+    const { width, scale, weeklyData } = this.data;
+    let height = CHART_CANVAS_HEIGHT * scale;
+    let ctx = wx.createCanvasContext('chart');
+    fixChart(ctx, width, height)
+
+    // 添加温度
+    Chart.pluginService.register({
+      afterDatasetsDraw(e, t) {
+        ctx.setTextAlign('center')
+        ctx.setTextBaseline('middle')
+        ctx.setFontSize(16)
+
+        e.data.datasets.forEach((t, a) => {
+          let r = e.getDatasetMeta(a)
+          r.hidden ||
+            r.data.forEach((e, r) => {
+              // 昨天数据发灰
+              ctx.setFillStyle(r === 0 ? '#e0e0e0' : '#ffffff')
+
+              let i = t.data[r].toString() + '\xb0'
+              let o = e.tooltipPosition()
+              0 == a ? ctx.fillText(i, o.x + 2, o.y - 8 - 10) : 1 == a && ctx.fillText(i, o.x + 2, o.y + 8 + 10)
+            })
+        })
+      }
+    })
+    return new Chart(ctx, getChartConfig(weeklyData))
+  },
+  onShow() {
+    // 提前获取， 防止网络延迟然后数据获取慢
+    this._setPrefetchTimer();
+    // console.log('globalData', app.globalData)
+  },
+  onLoad() {
+    // 获取系统信息
+    // 用于系统适配
+    wx.getSystemInfo({
+      success: (res) => {
+        let width = res.windowWidth
+        // 适配
+        let scale = width / 375
+        this.setData({
+          width,
+          scale,
+          paddingTop: res.statusBarHeight + 12
+        })
+      }
+    })
+    const pages = getCurrentPages()  // 获取当前加载页面
+    const currentPage = pages[pages.length - 1] // 获取当前页面对象
+    //  获取分享过来的地址
+    const query = currentPage.options
+    if (query && query.address && query.lat && query.lon) {
+      // setData 是异步的所以需要先获取数据在获取天气数据
+      this.setData({
+        city,
+        province,
+        county,
+        address,
+        lat,
+        lon
+      },
+        () => {
+          this.getWeatherData()
+        })
+    } else {
+      // 如果不是从分享的地方过来
+      this.setDataFormCache()
+      this.getLocation()
+    }
   },
   onPullDownRefresh() {
     this.getWeatherData(() => {
@@ -282,5 +409,5 @@ Page({
         path: url
       }
     }
-  }
+  },
 })

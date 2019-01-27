@@ -1,0 +1,53 @@
+// {{}} 对表达式的支持不强， 所以用wxs 模板增强
+//  就是 html 文件对数据的处理， 在js 文件中处理也可以的
+
+var WEEK_NAME = ['周一', '周二', '周三', '周四', '周五', '周六', '周日', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
+module.exports = {
+  humidity: function(h) {
+    // 判断一下，毕竟是传过来的数据
+    if (h) {
+      return '湿度' + h + '%'
+    }
+    return h
+  },
+  windLevel: function(level) {
+    if (level === '1-2') {
+      return '微风';
+    } else {
+      return level + '级'
+    }
+  },
+  wind: function(code, level) {
+    if (!code) {
+      return '无风'
+    }
+    if (level) {
+      level = level.toString().split('-');
+      level = level[level.length - 1];
+      return code + ' ' + level + '级'
+    }
+    return code;
+  },
+  formatWeeklyDate: function(i) {
+    // console.log('i', i)
+    var now = getDate();
+    // console.log('now', now)
+    var names = ['今天', '明天', '后天'];
+    if (names[i]) {
+      return names[i];
+    }
+    console.log('dsad',now.getDay())
+    var curWeek = now.getDay() - 1 + i
+    return WEEK_NAME[curWeek]
+  },
+  formatDate: function(ts) {
+    var date = getDate(ts);
+    // console.log('month', date.getMonth())
+    // console.log('day', date.getDate())
+    var month = ('00' + (date.getMonth() + 1)).slice(-2);
+    var day = ('00'+ date.getDate()).slice(-2);
+    // console.log('month, day', month, day)
+    return month + '/' + day;
+  }
+}

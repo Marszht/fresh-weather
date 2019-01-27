@@ -18,10 +18,10 @@ Page({
   data: {
     avatarUrl: globalData.avatarUrl,
     nickname: globalData.nickname,
-    auth: -1,
-    daysStyle: [],
+    auth: -1, // 授权状态 
+    daysStyle: [], // 绑定日历日期颜色
     todayEmotion: '',
-    activeEmotion: 'serene',
+    activeEmotion: 'serene', // 选择今天的心情
     // 定义好的数组，心情签到。
     emotion: ['serene', 'hehe', 'ecstatic', 'sad', 'terrified'],
     // 日历上签到显示的颜色
@@ -52,6 +52,7 @@ Page({
     this.setData({
       activeEmotion: activeEmotion
     });
+    // console.log('active', activeEmotion)
   },
 
   // 获取用户权限信息, 参数是可以临时加的？对的
@@ -94,6 +95,7 @@ Page({
     var now = new Date();
     var today = (0, _utils.dateFormat)(now);
     var todayEmotion = '';
+    console.log('setData', data);
     data.forEach(function (v) {
       var ts = v.tsModified;
       var date = new Date(ts);
@@ -128,6 +130,7 @@ Page({
     (0, _api.getEmotionByOpenidAndDate)(this.data.openid, year, month).then(function (r) {
       // console.log('签到数据', r.data)
       var data = r.data || [];
+      console.log('calendar', data);
       globalData['diary-' + year + '-' + month] = data;
       _this._setDayData(data, year, month);
     }).catch(function (e) {
@@ -171,12 +174,14 @@ Page({
       var data = globalData['diary-' + year + '-' + month] || [];
       console.log('diary', data);
       // console.log('callback', data)
+      // 所有的情况都会考虑
       if (data && data.length) {
         that._setDayData({ data: data, year: year, month: month });
       } else {
         that.setCalendarColor();
       }
     }
+    // 如果之前存入了openid
     if (openid) {
       callback();
     } else {
@@ -230,13 +235,16 @@ Page({
     this.setData({
       curMonth: (0, _utils.dateFormat)(new Date(), 'yyyy-MM')
     });
-    console.log('curMonth', (0, _utils.dateFormat)(new Date(), 'yyyy-MM')); // 当前月份   
+    // console.log('curMonth', dateFormat(new Date(), 'yyyy-MM')) // 当前月份   
     // this.getUserOpenId()
     // 另一个参数是失败时的回调函数
     this.getScope(this.getUserInfo, function () {
       // 如果失败还是显示要获取授权状态
       _this3.setData({ auth: 0 });
     });
+  },
+  onShow: function onShow() {
+    // console.log()
   },
 
   // 返回
@@ -272,6 +280,7 @@ Page({
         var year = now.getFullYear();
         var month = now.getMonth() + 1;
         var data = globalData['diary-' + year + '-' + month] || [];
+        console.log('store', data);
         if (data.length) {
           data.push({
             openid: openid,

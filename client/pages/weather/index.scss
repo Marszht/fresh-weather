@@ -186,7 +186,7 @@ icon {
         line-height: 44rpx;
       }
     }
-    .icon {
+    icon {
       float: right;
       font-size: 44rpx;
       height: 44rpx;
@@ -229,3 +229,98 @@ icon {
   }
 }
 
+.week {
+  position: relative;
+  padding: 40rpx 0;
+  min-height: 200rpx;
+
+  .week-weather {
+    @include flex-row;
+    text-align: center;
+    .item:first-child {
+      color: #e0e0e0;
+    }
+    .item {
+      flex: 1;
+      .day , .date, .wind{
+        color: #efefef;
+      }
+      .wind {
+        font-size: 24rpx;
+        line-height: 24rpx;
+        height: 24rpx;
+        width: 80rpx;
+        margin: 0 auto 12rpx;
+        overflow: hidden;
+      }
+      .date {
+        margin: 10rpx 0 30rpx;
+        font-size: 24rpx;
+      }
+      .wt {
+        margin-bottom: 30rpx;
+      }
+      .night {
+        margin-top: 272rpx;
+      }
+      .night .wt {
+        margin: 32rpx 0 30rpx;
+      }
+      icon.img {
+        font-size: 38rpx;
+        display: block;
+        margin: 0 aotu;
+      }
+    }
+  }
+  .week-chart {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 272rpx;
+    top: 262rpx;
+  }
+  .week-chart canvas {
+    width: 750rpx;
+    height: 272rpx;
+  }
+}
+
+.life-style {
+  @include flex-row;
+  flex-wrap: wrap;
+  .item {
+    float: left;
+    text-align: center;
+    width: 25%;
+    height: 188rpx;
+    border-right: 2rpx solid rgba(255, 255, 255, .1);
+    border-bottom: 2rpx solid rgba(255, 255, 255, .1);
+    box-sizing: border-box;
+    padding: 50rpx 0 0;    
+  }
+  .content {
+    font-size: 36rpx;
+    margin-top: 20rpx;
+  }
+  .title {
+    icon {
+      font-size: 24rpx;
+      margin-right: 10rpx;
+      margin-top: -2rpx;
+    }
+    color: #fff;
+    opacity: 0.7;
+    font-size: 24rpx;
+    height: 24rpx;
+    line-height: 24rpx;
+  }
+}
+.source {
+  opacity: .6;
+  color: #fff;
+  padding: 24rpx 0 40rpx;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+}

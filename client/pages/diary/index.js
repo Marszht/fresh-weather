@@ -13,10 +13,10 @@ Page({
   data: {
     avatarUrl: globalData.avatarUrl,
     nickname: globalData.nickname,
-    auth: -1,
-    daysStyle: [],
-    todayEmotion: '',
-    activeEmotion: 'serene',
+    auth: -1,                       // 授权状态 
+    daysStyle: [],                 // 绑定日历日期颜色
+    todayEmotion: '',     
+    activeEmotion: 'serene',      // 选择今天的心情
     // 定义好的数组，心情签到。
     emotion: ['serene', 'hehe', 'ecstatic', 'sad', 'terrified'],
     // 日历上签到显示的颜色
@@ -43,6 +43,7 @@ Page({
     this.setData({
       activeEmotion
     })
+    // console.log('active', activeEmotion)
   },
   // 获取用户权限信息, 参数是可以临时加的？对的
   getScope(success, fail, name = "scope.userInfo") {
@@ -78,6 +79,7 @@ Page({
     const now = new Date();
     const today = dateFormat(now);
     let todayEmotion = '';
+    console.log('setData', data)
     data.forEach((v) => {
       let ts = v.tsModified;
       let date = new Date(ts);
@@ -110,6 +112,7 @@ Page({
       .then((r) => {
         // console.log('签到数据', r.data)
         const data = r.data || [];
+        console.log('calendar', data)
         globalData[`diary-${year}-${month}`] = data;
         this._setDayData(data, year, month);
       })
@@ -122,7 +125,7 @@ Page({
       })
   },
   // 获取用户信息
-  getUserInfo() {
+  getUserInfo() {  
     //  如果用户不存在全局数据， 也就是globalData里面没有，就获取
     if (!globalData.nickname || globalData.avatarUrl) {
       // 这个函数不做数据的处理，
@@ -151,12 +154,14 @@ Page({
       const data = globalData[`diary-${year}-${month}`] || []
       console.log('diary', data)
       // console.log('callback', data)
+      // 所有的情况都会考虑
       if (data && data.length) {
-        that._setDayData({ data, year, month })
+        that._setDayData({data, year, month })
       } else {
         that.setCalendarColor()
       }
     }
+    // 如果之前存入了openid
     if (openid) {
       callback();
     } else {
@@ -203,13 +208,16 @@ Page({
     this.setData({
       curMonth: dateFormat(new Date(), 'yyyy-MM')
     })
-    console.log('curMonth', dateFormat(new Date(), 'yyyy-MM')) // 当前月份   
+    // console.log('curMonth', dateFormat(new Date(), 'yyyy-MM')) // 当前月份   
     // this.getUserOpenId()
     // 另一个参数是失败时的回调函数
     this.getScope(this.getUserInfo, () => {
       // 如果失败还是显示要获取授权状态
       this.setData({ auth: 0 })
     })
+  },
+  onShow() {
+    // console.log()
   },
   // 返回
   goBack() {
@@ -238,6 +246,7 @@ Page({
           const year = now.getFullYear()
           const month = now.getMonth() + 1
           const data = globalData[`diary-${year}-${month}`] || []
+          console.log('store', data)
           if (data.length) {
             data.push({
               openid,

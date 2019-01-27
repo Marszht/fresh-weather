@@ -3,7 +3,7 @@ const request = require('request')
 const path = require('path')
 const crypto = require('crypto')
 /*<remove trigger="prod">*/
-const STATIC_SERVER_URL = 'http://127.0.0.1:3000/static'
+const STATIC_SERVER_URL = 'http://127.0.0.1:1314/static/'
 /*</remove>*/
 const BACKGROUND_PERFIXER = `${STATIC_SERVER_URL}/bg`;
 const WEATHER_IMAGE_PERFIXER = `${STATIC_SERVER_URL}/icon`;
@@ -218,6 +218,7 @@ const $ = {
       return '#ff6600'
     }
   },
+  // 判断是否为晚上， 根据接口的传回来的数据， 日出， 日落
   _isNight: (now, sunrise, sunset) => {
     sunrise = parseInt(sunrise) + 1
     sunset = parseInt(sunset)
