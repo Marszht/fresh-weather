@@ -219,6 +219,47 @@ const $ = {
       return '#ff6600'
     }
   },
+  // 判断雨天雪天星空
+  getEffectSettings(code) {
+    code = parseInt(code)
+    let result = false
+    if ((code >= 300 && code <= 304) || code === 309 || code === 313 || code == 399 || code === 406 || code === 404) {
+      result = {
+        name: 'rain',
+        amount: 100
+      }
+    } else if (code === 499 || code === 405) {
+      result = {
+        name: 'snow',
+        amount: 70
+      }
+    } else if (code >= 305 && code <= 312) {
+      let amount = 100 + (code - 305) * 10
+      result = {
+        name: 'rain',
+        amount: amount
+      }
+    } else if (code >= 314 && code <= 318) {
+      let amount = 100 + (code - 314) * 10
+      result = {
+        name: 'rain',
+        amount: amount
+      }
+    } else if (code >= 400 && code <= 403) {
+      let amount = 60 + (code - 400) * 10
+      result = {
+        name: 'snow',
+        amount: amount
+      }
+    } else if (code >= 407 && code <= 410) {
+      let amount = 60 + (code - 407) * 10
+      result = {
+        name: 'snow',
+        amount: amount
+      }
+    }
+    return result
+  },
   // 判断是否为晚上， 根据接口的传回来的数据， 日出， 日落
   _isNight: (now, sunrise, sunset) => {
     sunrise = parseInt(sunrise) + 1
@@ -350,6 +391,7 @@ const $ = {
       let { now, daily_forecast, lifestyle, hourly } = result
       return {
         status: 0,
+        effect: $.getEffectSettings(now.cond_code),
         oneWord: $.getOneWord(now.cond_code),
         current: $._now(now, result),
         hourly: $._hourly(hourly, result),

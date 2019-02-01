@@ -3,6 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.drawEffect = exports.getChartData = exports.getChartConfig = exports.fixChart = exports.dateFormat = undefined;
+
+var _effect = require('../lib/effect');
+
+var _effect2 = _interopRequireDefault(_effect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 //  一个时间格式化函数， 一般放在utils中
 var dateFormat = exports.dateFormat = function dateFormat(d) {
   var pattern = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'yyyy-MM-dd';
@@ -154,5 +162,12 @@ var getChartData = exports.getChartData = function getChartData(data) {
     maxData: maxData,
     minData: minData
   };
+};
+var drawEffect = exports.drawEffect = function drawEffect(canvasId, name, width, height, amount) {
+  var rain = (0, _effect2.default)(name, wx.createCanvasContext(canvasId), width, height, {
+    amount: amount || 100,
+    speedFactor: 0.03
+  });
+  return rain.run();
 };
 //# sourceMappingURL=utils.js.map

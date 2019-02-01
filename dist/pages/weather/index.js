@@ -18,9 +18,13 @@ import {getEmotionByOpenidAndDate, getMood, geocoder, getWeather, getAir} from '
 </jdists>*/
 
 /*<remove trigger="prod">*/
+// 这些直接套进来就好
 var app = getApp();
-var can = false;
+var prefetchTimer = void 0;
+var can = false; // 是否允许授权标志
+var effectInstance = void 0;
 var CHART_CANVAS_HEIGHT = 272 / 2;
+var EFFECT_CANVAS_HEIGHT = 768 / 2; // 雨雪效果宽度
 var isUpdata = false;
 Page({
   data: {
@@ -204,19 +208,21 @@ Page({
         province = _data2.province,
         city = _data2.city,
         county = _data2.county;
+    // console.log(lat, lon)
     // 先传默认的经纬度
     // console.log('lat, lon', lat, lon)
 
     (0, _apiMock.getWeather)(lat, lon).then(function (res) {
-      // console.log('dskabd', res.result)
+      console.log('res.result', res.result);
       wx.hideLoading();
       if (typeof cb === 'function') {
         cb();
       }
       if (res.result) {
+        console.log('res.result:', res.result);
         _this5.render(res.result);
-        // console.log('res.result:', res.result)
       } else {
+        console.log('fail');
         fail();
       }
     }).catch(fail);
@@ -254,7 +260,8 @@ Page({
         current = data.current,
         lifeStyle = data.lifeStyle,
         _data$oneWord = data.oneWord,
-        oneWord = _data$oneWord === undefined ? '' : _data$oneWord;
+        oneWord = _data$oneWord === undefined ? '' : _data$oneWord,
+        effect = data.effect;
     var backgroundColor = current.backgroundColor,
         backgroundImage = current.backgroundImage;
 
@@ -281,6 +288,10 @@ Page({
       oneWord: oneWord,
       lifeStyle: lifeStyle
     });
+    // this.stopEffect()
+    // if (effect && effect.name) {
+    //   effectInstance = drawEffect('effect', effect.name, width, EFFECT_CANVAS_HEIGHT * scale, effect.amount)
+    // }
     //  延时画图
     this.drawChart();
     // 缓存数据
@@ -414,6 +425,11 @@ Page({
     });
     return new _chart2.default(ctx, (0, _utils.getChartConfig)(weeklyData));
   },
+  stopEffect: function stopEffect() {
+    if (effectInstance && effectInstance.clear) {
+      effectInstance.clear();
+    }
+  },
   onShow: function onShow() {
     // 提前获取， 防止网络延迟然后数据获取慢
     this._setPrefetchTimer();
@@ -424,6 +440,8 @@ Page({
 
     // 获取系统信息
     // 用于系统适配
+    this.stopEffect();
+    effectInstance = (0, _utils.drawEffect)('effect', 'rain', this.data.width, EFFECT_CANVAS_HEIGHT * this.data.scale, 100);
     wx.getSystemInfo({
       success: function success(res) {
         var width = res.windowWidth;
@@ -457,6 +475,10 @@ Page({
       this.setDataFormCache();
       this.getLocation();
     }
+  },
+  onHide: function onHide() {
+    // 清除定时器
+    clearTimeout(prefetchTimer);
   },
   onPullDownRefresh: function onPullDownRefresh() {
     this.getWeatherData(function () {

@@ -8,6 +8,8 @@
   <!-- 顶部栏 包括今天实时天气空气质量， 以及今明两天天气 -->
   <!-- padding-top 根据手机系统来， 因为不同手机的顶部的navBar不同 -->
   <view class="container" id="canvas-wrapper" style="padding-top: {{paddingTop}}px">
+    <!-- 雨雪效果 -->
+    <canvas canvas-id="effect" id="effect"/>
     <view class="now">
       <view class="location" bindtab="chooseLocation">
         <icon type="dingwei" />

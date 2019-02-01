@@ -28,6 +28,13 @@
 icon {
   font-size: 32rpx; }
 
+#effect {
+  width: 750rpx;
+  height: 768rpx;
+  position: absolute;
+  top: 0;
+  right: 0; }
+
 .now {
   height: 560rpx;
   overflow: hidden;

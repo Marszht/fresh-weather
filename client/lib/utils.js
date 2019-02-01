@@ -1,3 +1,4 @@
+import effect from '../lib/effect'
 //  一个时间格式化函数， 一般放在utils中
 export const dateFormat = (d, pattern = 'yyyy-MM-dd') => {
   let y = d.getFullYear().toString(),
@@ -148,4 +149,12 @@ export const getChartData = (data) => {
     maxData,
     minData
   }
+}
+
+export const drawEffect = (canvasId, name, width, height, amount) => {
+  let rain = effect(name, wx.createCanvasContext(canvasId), width, height, {
+    amount: amount || 100,
+    speedFactor: 0.03
+  })
+  return rain.run()
 }

@@ -1,3 +1,4 @@
+// 这些直接套进来就好
 import { fixChart, getChartConfig, drawEffect } from '../../lib/utils';
 import Chart from '../../lib/chartjs/chart'
 /*<remove trigger="prod">*/
@@ -9,8 +10,11 @@ import { getWeather, getAir } from '../../lib/api-mock'
 import {getEmotionByOpenidAndDate, getMood, geocoder, getWeather, getAir} from '../../lib/api'
 </jdists>*/
 const app = getApp()
-let can = false;
+let prefetchTimer
+let can = false;                       // 是否允许授权标志
+let effectInstance;
 const CHART_CANVAS_HEIGHT = 272 / 2;
+const EFFECT_CANVAS_HEIGHT = 768 / 2;           // 雨雪效果宽度
 let isUpdata = false;
 Page({
   data: {
@@ -168,19 +172,21 @@ Page({
       })
     }
     const { lat, lon, province, city, county } = this.data
+    // console.log(lat, lon)
     // 先传默认的经纬度
     // console.log('lat, lon', lat, lon)
     getWeather(lat, lon)
       .then((res) => {
-        // console.log('dskabd', res.result)
+        console.log('res.result', res.result)
         wx.hideLoading()
         if (typeof cb === 'function') {
           cb()
         }
         if (res.result) {
+          console.log('res.result:', res.result)          
           this.render(res.result);
-          // console.log('res.result:', res.result)
         } else {
+          console.log('fail')
           fail();
         }
       })
@@ -213,7 +219,7 @@ Page({
     // 全局定义了upData 
     isUpdata = true;
     const { width, scale } = this.data;
-    const { hourly, daily, current, lifeStyle, oneWord = '' } = data;
+    const { hourly, daily, current, lifeStyle, oneWord = '', effect} = data;
     const { backgroundColor, backgroundImage } = current;
     const _today = daily[0],
       _tomorrow = daily[1];
@@ -238,6 +244,10 @@ Page({
       oneWord,
       lifeStyle
     })
+    // this.stopEffect()
+    // if (effect && effect.name) {
+    //   effectInstance = drawEffect('effect', effect.name, width, EFFECT_CANVAS_HEIGHT * scale, effect.amount)
+    // }
     //  延时画图
     this.drawChart()
     // 缓存数据
@@ -245,6 +255,7 @@ Page({
     // 启动预取定时器
     this._setPrefetchTimer(10e3);
   },
+
   // 当第二天的数据不存在时
   dataCache() {
     const { current, backgroundImage, backgroundColor, today, tomorrow, address, tips, hourlyData } = this.data;
@@ -345,6 +356,11 @@ Page({
     })
     return new Chart(ctx, getChartConfig(weeklyData))
   },
+  stopEffect() {
+    if (effectInstance && effectInstance.clear) {
+      effectInstance.clear()
+    }
+  },
   onShow() {
     // 提前获取， 防止网络延迟然后数据获取慢
     this._setPrefetchTimer();
@@ -353,6 +369,8 @@ Page({
   onLoad() {
     // 获取系统信息
     // 用于系统适配
+    this.stopEffect()
+    effectInstance = drawEffect('effect', 'rain', this.data.width, EFFECT_CANVAS_HEIGHT * this.data.scale, 100)    
     wx.getSystemInfo({
       success: (res) => {
         let width = res.windowWidth
@@ -387,6 +405,10 @@ Page({
       this.setDataFormCache()
       this.getLocation()
     }
+  },
+  onHide(){
+    // 清除定时器
+    clearTimeout(prefetchTimer);
   },
   onPullDownRefresh() {
     this.getWeatherData(() => {
